@@ -1,8 +1,21 @@
-application: guestbook
+application: enxuga-enchente
 version: 1
 runtime: python
 api_version: 1
 
 handlers:
+- url: /favicon.ico
+  static_files: static/images/favicon.ico
+
+- url: /css
+  static_dir: static/css
+
+- url: /images
+  static_dir: static/images
+
+- url: /js
+  static_dir: static/js
+
 - url: .*
-  script: guestbook.py
+  script: enxuga.py
+
