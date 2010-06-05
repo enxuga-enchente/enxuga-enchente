@@ -10,6 +10,19 @@ class Problem(db.Model):
     geolocation = db.GeoPtProperty()
     description = db.TextProperty()
     closed = db.BooleanProperty(default=False)
+    votes = db.IntegerProperty()
+    
+    def vote(self, author, vote):
+        v = ProblemVote(problem = self, author = author, vote = vote)
+        v.put()
+        self.votes_total += vote
+        self.put()
+
+    def vote_up(self, author):
+        self.vote(author = author, vote = +1)
+
+    def vote_down(self, author):
+        self.vote(author = author, vote = +1)
 
 
 class Photo(db.Model):
@@ -31,6 +44,18 @@ class Comment(db.Model):
     text = db.TextProperty()
     date = db.DateTimeProperty(auto_now_add=True)
     
+    def vote(self, author, vote):
+        v = CommentVote(comment = self, author = author, vote = vote)
+        v.put()
+        self.votes_total += vote
+        self.put()
+
+    def vote_up(self, author):
+        self.vote(author = author, vote = +1)
+
+    def vote_down(self, author):
+        self.vote(author = author, vote = +1)
+
     
 class ProblemVote(db.Model):
     """Voto para um problema"""
