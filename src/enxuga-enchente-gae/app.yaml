@@ -20,6 +20,9 @@ handlers:
 - url: /test.*
   script: gaeunit.py
 
+- url: /fixtures
+  script: fixtures.py
+
 - url: .*
   script: enxuga.py
 
