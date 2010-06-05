@@ -4,6 +4,7 @@ runtime: python
 api_version: 1
 
 handlers:
+<<<<<<< HEAD
 - url: /favicon.ico
   static_files: static/images/favicon.ico
 
@@ -15,6 +16,10 @@ handlers:
 
 - url: /js
   static_dir: static/js
+=======
+- url: test.*
+  script: gaeunit.py
+>>>>>>> b09e52716e2c80c80b7a11bb3babe15074c15ba3
 
 - url: .*
   script: enxuga.py
