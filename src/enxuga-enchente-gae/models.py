@@ -25,7 +25,7 @@ class Photo(db.Model):
 class Comment(db.Model):
     """Comentário relacionado a um problema"""
     
-    user = db.UserProperty()
+    author = db.UserProperty()
     problem = db.ReferenceProperty(Problem)
     
     text = db.TextProperty()
@@ -36,7 +36,7 @@ class ProblemVote(db.Model):
     """Voto para um problema"""
     
     problem = db.ReferenceProperty(Problem)
-    user = db.UserProperty()
+    author = db.UserProperty()
     vote = db.IntegerProperty()
     
     

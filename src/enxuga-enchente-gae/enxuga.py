@@ -5,7 +5,7 @@ import cgi
 import datetime
 import wsgiref.handlers
 
-import simplejson as json
+import json
 
 from google.appengine.ext import db
 from google.appengine.api import users
@@ -21,7 +21,7 @@ class MainPage(webapp.RequestHandler):
 
 class ManyProblemsPage(webapp.RequestHandler):
     def get(self):
-        pass
+        return json.JSONEncoder().encode(self, Problem.all())
 
 
 class OneProblemPage(webapp.RequestHandler):
@@ -46,16 +46,33 @@ class PhotoPage(webapp.RequestHandler):
         photo = Photo(problem=self.request.POST.get("problem_id"),
                       author=users.get_current_user(),
                       description=self.request.POST.get("description"))
-                      
         photo.put()
 
 
 class CommentPage(webapp.RequestHandler):
-    pass
+    def post(self):
+        Problem.get(self.request.POST.get("problem_id")).comment(author=self.get_current_user(),
+                                                                 text=self.request.POST.get("text"))
         
+        
+class ProblemVotePage(webapp.RequestHandler):
+    def post(self):
+        Problem.get(self.request.POST.get("problem_id")).vote(author=self.get_current_user(),
+                                                              vote=self.request.POST.get("vote"))
+
+
+class CommentVotePage(webapp.RequestHandler):
+    def post(self):
+        Comment.get(self.request.POST.get("comment_id")).vote(author=self.get_current_user(),
+                                                              vote=self.request.POST.get("vote"))
+
+
 application = webapp.WSGIApplication([('/problems', ManyProblemsPage),
                                       ('/problem', OneProblemPage),
-                                      ('/photo', PhotoPage)], debug=True)
+                                      ('/problem_vote', ProblemVotePage),
+                                      ('/photo', PhotoPage),
+                                      ('/comment', CommentPage),
+                                      ('/comment_vote', CommentVotePage)], debug=True)
 
 
 def main():
