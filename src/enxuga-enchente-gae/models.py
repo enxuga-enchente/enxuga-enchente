@@ -26,7 +26,7 @@ class Photo(db.Model):
 class Comment(db.Model):
     """Comentário relacionado a um problema"""
     
-    photo = db.ReferenceProperty(Photo)
+    photo = db.ReferenceProperty(Problem)
     
     
 class Vote(db.Model):
