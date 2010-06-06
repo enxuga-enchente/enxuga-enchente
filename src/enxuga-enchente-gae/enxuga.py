@@ -17,7 +17,7 @@ from models import *
 
 class ManyProblemsPage(webapp.RequestHandler):
     def get(self):
-        return json.JSONEncoder().encode(Problem.all()[:10])
+        return self.response.out.write(json.JSONEncoder().encode({"result":Problem.serialize_set(Problem.all())}))
 
 
 class OneProblemPage(webapp.RequestHandler):

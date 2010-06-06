@@ -25,16 +25,38 @@ class Problem(db.Model):
     def vote_down(self, author):
         self.vote(author = author, vote = +1)
 
+    def serialize(self):
+        return {"author":str(self.author),
+                "photos":Photo.serialize_set(self.photo_set),
+                "comments":Comment.serialize_set(self.comment_set),
+                "geolocation":(self.geolocation.lat, self.geolocation.lon),
+                "description":self.description}
+
+    @classmethod
+    def serialize_set(cls, set):
+        return [obj.serialize() for obj in set]
 
 class Photo(db.Model):
     """Informações da foto do problema"""
     
     problem = db.ReferenceProperty(Problem)
     author = db.UserProperty()
+    image = db.BlobProperty()
 
     description = db.TextProperty()
     date = db.DateTimeProperty(auto_now_add=True)
-   
+
+    def serialize(self):
+        return {"problem_id":self.problem.id,
+                "author":self.author.email,
+                "image":self.image,
+                "description":self.description,
+                "date":self.date.strftime("%H:%M - %d/%m/%Y")}
+
+    @classmethod
+    def serialize_set(cls, set):
+        return [obj.serialize() for obj in set]
+    
     
 class Comment(db.Model):
     """
@@ -58,6 +80,16 @@ class Comment(db.Model):
 
     def vote_down(self, author):
         self.vote(author = author, vote = +1)
+
+    def serialize(self):
+        return {"problem_id":problem.id,
+                "author":self.author.email,
+                "text":self.image,
+                "date":self.date.strftime("%H:%M - %d/%m/%Y")}
+
+    @classmethod
+    def serialize_set(cls, set):
+        return [obj.serialize() for obj in set]
 
     
 class ProblemVote(db.Model):
