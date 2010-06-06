@@ -6,7 +6,6 @@ from models import *
 
 class ProblemTest(unittest.TestCase):
     
-    
     def setUp(self):
         problem = Problem(author=None,
                   geolocation=GeoPt(1,1),

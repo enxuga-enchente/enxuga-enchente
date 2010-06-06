@@ -10,7 +10,7 @@ class Problem(db.Model):
     geolocation = db.GeoPtProperty()
     description = db.TextProperty()
     closed = db.BooleanProperty(default=False)
-    votes = db.IntegerProperty()
+    votes_total = db.IntegerProperty(default=0)
 
     # TODO: Move these 3 methods into a mixin (called "Votable"?)
     def vote(self, author, vote):

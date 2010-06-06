@@ -10,28 +10,26 @@ import json
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.ext import webapp
+from google.appengine.ext.webapp import template
 
 from models import * 
 
 
-class MainPage(webapp.RequestHandler):
-    def get(self):
-        self.response.out.write('Funcionar, funciona')
-
-
 class ManyProblemsPage(webapp.RequestHandler):
     def get(self):
-        return json.JSONEncoder().encode(self, Problem.all())
+        return json.JSONEncoder().encode(Problem.all()[:])
 
 
 class OneProblemPage(webapp.RequestHandler):
     
     def get(self):
-        return json.JSONEncoder().encode(self, Problem.get(self.request.GET.get("id")))
+        return json.JSONEncoder().encode(Problem.get(self.request.GET.get("id")))
 
     def post(self):
-        problem = Problem(author=self.request.user,
-                          geolocation=self.request.POST.get("geolocation"),
+        geopt = db.GeoPt(self.request.POST.get("geolocation_lat"), self.request.POST.get("geolocation_lon"))
+        
+        problem = Problem(author=users.get_current_user(),
+                          geolocation=geopt,
                           description=self.request.POST.get("description"))
         problem.put()
         
