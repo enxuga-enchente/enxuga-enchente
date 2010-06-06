@@ -60,7 +60,7 @@
 				    // request the home itself
                     var params = {};
                     params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
-                    gadgets.io.makeRequest(appRoot+"home.json?nocache="+(+new Date())+"&bpc=1", onHome, params);
+                    gadgets.io.makeRequest(appRoot+"/home.json?nocache="+(+new Date())+"&bpc=1", onHome, params);
 				};
 
 				function onHome(resp) {
