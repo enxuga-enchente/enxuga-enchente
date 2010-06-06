@@ -11,7 +11,7 @@
     <form method="POST" action="/photo">
       <select name="problem_id">
         {% for problem in problems %}
-        <option value="{{ problem.ID }}">{{ problem.title }}</option>
+        <option value="{{ problem.key.id }}">{{ problem.title }}</option>
         {% endfor %}
       </select>
       <input type="file" name="photo" />

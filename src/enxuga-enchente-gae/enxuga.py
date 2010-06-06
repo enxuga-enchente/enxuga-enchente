@@ -61,7 +61,7 @@ class ProblemVotePage(webapp.RequestHandler):
 
 class CommentVotePage(webapp.RequestHandler):
     def post(self):
-        Comment.get_by_id(int(self.request.get("comment_id")).vote(author=self.get_current_user(),
+        Comment.get_by_id(int(self.request.get("comment_id"))).vote(author=self.get_current_user(),
                                                               vote=self.request.get("vote"))
 
 

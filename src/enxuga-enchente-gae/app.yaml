@@ -23,10 +23,10 @@ handlers:
 - url: /mock.*
   script: mock_site.py
 
-- url: /photos/*
+- url: /photos/.*
   script: photos.py
 
-- url: /admin/*
+- url: /admin/.*
   script: admin.py
 
 - url: .*
