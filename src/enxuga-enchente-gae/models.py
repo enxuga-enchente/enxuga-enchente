@@ -11,7 +11,8 @@ class Problem(db.Model):
     description = db.TextProperty()
     closed = db.BooleanProperty(default=False)
     votes = db.IntegerProperty()
-    
+
+    # TODO: Move these 3 methods into a mixin (called "Votable"?)
     def vote(self, author, vote):
         v = ProblemVote(problem = self, author = author, vote = vote)
         v.put()
@@ -36,7 +37,9 @@ class Photo(db.Model):
    
     
 class Comment(db.Model):
-    """Comentário relacionado a um problema"""
+    """
+    a comment made on a problem
+    """
     
     author = db.UserProperty()
     problem = db.ReferenceProperty(Problem)
@@ -58,7 +61,9 @@ class Comment(db.Model):
 
     
 class ProblemVote(db.Model):
-    """Voto para um problema"""
+    """
+    up/down vote for a problem
+    """
     
     problem = db.ReferenceProperty(Problem)
     author = db.UserProperty()
@@ -66,7 +71,9 @@ class ProblemVote(db.Model):
     
     
 class CommentVote(db.Model):
-    """Voto para o comentário"""
+    """
+    up/down vote for a comment
+    """
     
     comment = db.ReferenceProperty(Comment)
     user = db.UserProperty()
