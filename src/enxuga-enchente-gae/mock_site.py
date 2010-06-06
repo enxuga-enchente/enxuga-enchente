@@ -19,7 +19,14 @@ class AddProblemPage(webapp.RequestHandler):
         self.response.out.write(template.render(os.path.dirname(__file__) + "/templates/add_problem.html", {"user":users.get_current_user()}))
 
 
-application = webapp.WSGIApplication([('/mock/add_problem', AddProblemPage)], debug=True)
+class AddCommentPage(webapp.RequestHandler):
+    @login_required
+    def get(self):
+        self.response.out.write(template.render(os.path.dirname(__file__) + "/templates/add_comment.html", {"user":users.get_current_user()}))
+
+
+application = webapp.WSGIApplication([('/mock/add_problem', AddProblemPage),
+                                      ('/mock/add_comment', AddCommentPage)], debug=True)
 
 
 def main():

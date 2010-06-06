@@ -25,6 +25,10 @@ class Problem(db.Model):
     def vote_down(self, author):
         self.vote(author = author, vote = +1)
 
+    def comment(self, author, text):
+        comment = Comment(problem=self, author=author, text=text)
+        comment.put()
+
     def serialize(self):
         return {"author":str(self.author),
                 "photos":Photo.serialize_set(self.photo_set),
@@ -35,6 +39,7 @@ class Problem(db.Model):
     @classmethod
     def serialize_set(cls, set):
         return [obj.serialize() for obj in set]
+
 
 class Photo(db.Model):
     """Informações da foto do problema"""
@@ -47,8 +52,8 @@ class Photo(db.Model):
     date = db.DateTimeProperty(auto_now_add=True)
 
     def serialize(self):
-        return {"problem_id":self.problem.id,
-                "author":self.author.email,
+        return {"problem_id":self.problem.key().id(),
+                "author":str(self.author),
                 "image":self.image,
                 "description":self.description,
                 "date":self.date.strftime("%H:%M - %d/%m/%Y")}
@@ -82,9 +87,9 @@ class Comment(db.Model):
         self.vote(author = author, vote = +1)
 
     def serialize(self):
-        return {"problem_id":problem.id,
-                "author":self.author.email,
-                "text":self.image,
+        return {"problem_id":self.problem.key().id(),
+                "author":str(self.author),
+                "text":self.text,
                 "date":self.date.strftime("%H:%M - %d/%m/%Y")}
 
     @classmethod
@@ -100,6 +105,16 @@ class ProblemVote(db.Model):
     problem = db.ReferenceProperty(Problem)
     author = db.UserProperty()
     vote = db.IntegerProperty()
+
+    def serialize(self):
+        return {"problem_id":self.problem.key().id(),
+                "author":self.author.email,
+                "vote":self.vote}
+
+    @classmethod
+    def serialize_set(cls, set):
+        return [obj.serialize() for obj in set]
+
     
     
 class CommentVote(db.Model):
@@ -111,4 +126,11 @@ class CommentVote(db.Model):
     user = db.UserProperty()
     vote = db.IntegerProperty()
     
-    
+    def serialize(self):
+        return {"comment_id":self.comment.key().id(),
+                "author":self.author.email,
+                "vote":self.vote}
+
+    @classmethod
+    def serialize_set(cls, set):
+        return [obj.serialize() for obj in set]    

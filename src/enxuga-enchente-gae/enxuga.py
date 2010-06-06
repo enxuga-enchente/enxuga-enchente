@@ -23,10 +23,10 @@ class ManyProblemsPage(webapp.RequestHandler):
 class OneProblemPage(webapp.RequestHandler):
     
     def get(self):
-        return json.JSONEncoder().encode(Problem.get(self.request.GET.get("id")))
+        return json.JSONEncoder().encode(Problem.get(self.request.get("id")))
 
     def post(self):
-        geopt = db.GeoPt(self.request.POST.get("geolocation_lat"), self.request.POST.get("geolocation_lon"))
+        geopt = db.GeoPt(self.request.get("geolocation_lat"), self.request.get("geolocation_lon"))
         
         problem = Problem(author=users.get_current_user(),
                           geolocation=geopt,
@@ -39,29 +39,29 @@ class PhotoPage(webapp.RequestHandler):
         return json.JSONEncoder().encode(self, Photo.get(self.request.GET.get("id")))
 
     def post(self):
-        image = self.request.POST.get("photo")
+        image = self.request.get("photo")
         
-        photo = Photo(problem=self.request.POST.get("problem_id"),
+        photo = Photo(problem=self.request.get("problem_id"),
                       author=users.get_current_user(),
-                      description=self.request.POST.get("description"))
+                      description=self.request.get("description"))
         photo.put()
 
 
 class CommentPage(webapp.RequestHandler):
     def post(self):
-        Problem.get(self.request.POST.get("problem_id")).comment(author=self.get_current_user(),
-                                                                 text=self.request.POST.get("text"))
+        Problem.get_by_id(int(self.request.get("problem_id"))).comment(author=users.get_current_user(),
+                                                                       text=self.request.get("text"))
         
         
 class ProblemVotePage(webapp.RequestHandler):
     def post(self):
-        Problem.get(self.request.POST.get("problem_id")).vote(author=self.get_current_user(),
+        Problem.get_by_id(self.request.get("problem_id")).vote(author=self.get_current_user(),
                                                               vote=self.request.POST.get("vote"))
 
 
 class CommentVotePage(webapp.RequestHandler):
     def post(self):
-        Comment.get(self.request.POST.get("comment_id")).vote(author=self.get_current_user(),
+        Comment.get_by_id(self.request.POST.get("comment_id")).vote(author=self.get_current_user(),
                                                               vote=self.request.POST.get("vote"))
 
 
