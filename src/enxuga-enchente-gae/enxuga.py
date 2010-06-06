@@ -30,7 +30,7 @@ class OneProblemPage(webapp.RequestHandler):
         
         problem = Problem(author=users.get_current_user(),
                           geolocation=geopt,
-                          description=self.request.POST.get("description"))
+                          description=self.request.get("description"))
         problem.put()
         
         
@@ -55,14 +55,14 @@ class CommentPage(webapp.RequestHandler):
         
 class ProblemVotePage(webapp.RequestHandler):
     def post(self):
-        Problem.get_by_id(self.request.get("problem_id")).vote(author=self.get_current_user(),
-                                                              vote=self.request.POST.get("vote"))
+        Problem.get_by_id(int(self.request.get("problem_id"))).vote(author=self.get_current_user(),
+                                                              vote=self.request.get("vote"))
 
 
 class CommentVotePage(webapp.RequestHandler):
     def post(self):
-        Comment.get_by_id(self.request.POST.get("comment_id")).vote(author=self.get_current_user(),
-                                                              vote=self.request.POST.get("vote"))
+        Comment.get_by_id(int(self.request.get("comment_id")).vote(author=self.get_current_user(),
+                                                              vote=self.request.get("vote"))
 
 
 application = webapp.WSGIApplication([('/problems', ManyProblemsPage),
