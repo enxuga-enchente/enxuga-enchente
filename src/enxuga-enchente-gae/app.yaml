@@ -17,8 +17,11 @@ handlers:
 - url: /js
   static_dir: static/js
 
-- url: test.*
+- url: /test.*
   script: gaeunit.py
+
+- url: /fixtures
+  script: fixtures.py
 
 - url: .*
   script: enxuga.py
