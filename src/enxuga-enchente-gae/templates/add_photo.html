@@ -8,12 +8,13 @@
   <body>
     <h1>Mande a foto</h1>
 
-    <form method="POST" action="/photo">
+    <form method="POST" enctype="multipart/form-data" action="">
       <select name="problem_id">
         {% for problem in problems %}
-        <option value="{{ problem.ID }}">{{ problem.title }}</option>
+        <option value="{{ problem.key.id }}">{{ problem.title }}</option>
         {% endfor %}
       </select>
+      <input type="text" name="description">
       <input type="file" name="photo" />
       <input type="submit" name="" value="Manda a foto" />
     </form>

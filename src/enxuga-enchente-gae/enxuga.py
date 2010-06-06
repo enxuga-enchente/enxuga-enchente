@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
+import os
 import cgi
 import datetime
 import wsgiref.handlers
 
-import json
+from django.utils import simplejson as json
 
 from google.appengine.ext import db
 from google.appengine.api import users
@@ -62,15 +63,34 @@ class ProblemVotePage(webapp.RequestHandler):
 class CommentVotePage(webapp.RequestHandler):
     def post(self):
         Comment.get_by_id(int(self.request.get("comment_id"))).vote(author=self.get_current_user(),
-                                                               vote=self.request.get("vote"))
+                                                                    vote=self.request.get("vote"))
+        
+        
+class HomeJSONHandler(webapp.RequestHandler):
+    def get(self):
+        results = {}
+        results['feed'] = [ {'date': p.date.strftime('%H:%M %d/%m/%Y'), 'problem_id': p.key().id(), 
+                             'problemTitle': p.title,
+                             'problemMedias': [ { 'mediaType': 'photo',
+                                                  'mediaTitle': m.description,
+                                                  'mediaUrl': 'http://enxuga-enchente.appspot.com/photos/%d' % m.key().id() } for m in p.photo_set ] } for p in Problem.all() ]
+        self.response.out.write(json.JSONEncoder(indent = 4).encode(results))
+
+#
+class Main(webapp.RequestHandler):
+    # @login_required
+    def get(self):
+        self.response.out.write(template.render(os.path.dirname(__file__) + "/templates/main.xml",{"app":"orkut"}))
 
 
-application = webapp.WSGIApplication([('/problems', ManyProblemsPage),
+application = webapp.WSGIApplication([('/main', Main),
+                                      ('/problems', ManyProblemsPage),
                                       ('/problem', OneProblemPage),
                                       ('/problem_vote', ProblemVotePage),
                                       ('/photo', PhotoPage),
                                       ('/comment', CommentPage),
-                                      ('/comment_vote', CommentVotePage)], debug=True)
+                                      ('/comment_vote', CommentVotePage),
+                                      ('/home.json', HomeJSONHandler)], debug=True)
 
 
 def main():

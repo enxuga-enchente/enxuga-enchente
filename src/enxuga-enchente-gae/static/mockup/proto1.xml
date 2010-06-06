@@ -32,7 +32,7 @@
 									html+='<img src="'+media.mediaUrl+'" />';
 								}
 								html+='</dd>'+
-							'</dl>'
+							'</dl>';
 						});
 							
 							

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+	<ModulePrefs title="Enxuga Enchentes">
+		<Require feature="opensocial-0.8" />
+	</ModulePrefs>
+	<Content type="html">
+		<![CDATA[
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+			<script type="text/javascript">
+			    var appRoot = gadgets.util.getUrlParameters()["url"].replace(/\/main.*/,'');
+			</script>
+			<script type="text/javascript">
+			    document.write('<link rel="stylesheet" href="'+appRoot+'/css/jquery-ui-1.8.2.custom.css" type="text/css" media="screen" title="" charset="utf-8">');
+			    document.write('<link rel="stylesheet" href="'+appRoot+'/css/enxuga.css" type="text/css" media="screen" title="" charset="utf-8">');
+			    document.write('<scr'+'ipt type="text/javascript" src="'+appRoot+'/js/jquery-ui-1.8.2.custom.min.js"></scr'+'ipt>');
+			</script>
+			<script type="text/javascript">
+				gadgets.util.registerOnLoadHandler(init);
+				
+				function init() {
+				    // Menu events
+                    $('#app').bind('tabsselect', function(event, ui) {
+                        console.log(ui);
+                        
+                        if(ui.tab == '#home') {
+                            requestHome();
+                        }
+                        return;
+                        // Objects available in the function context:
+                        ui.tab     // anchor element of the selected (clicked) tab
+                        ui.panel   // element, that contains the selected/clicked tab contents
+                        ui.index   // zero-based index of the selected (clicked) tab
+
+                    });
+                    // show tabs
+                    $('#app').tabs();
+                    // get home from enxuga enchente site
+                    requestHome();
+                    
+                    $('#saveProblem').submit(function(e){
+                        e.preventDefault();e.stopPropagation();
+                        var params = {};
+                        params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
+                        params[gadgets.io.MethodType] = gadgets.io.MethodType.POST;
+                        params[gadgets.io.RequestParameters.POST_DATA] = $(this).serialize();
+                        gadgets.io.makeRequest(appRoot+"/problems?nocache="+(+new Date())+"&bpc=1", onSaveProblem, params);
+                        return false;
+                    });
+                    
+				};
+				
+				function onSaveProblem(resp) {
+					console.log(resp);
+				    
+				};
+				
+				function requestHome(url) {
+				    // show loading icon
+				    $('#home').html('<p style="align:center;"><img src="'+appRoot+'/images/loading.gif" /></p>')
+				    // request the home itself
+                    var params = {};
+                    params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
+                    gadgets.io.makeRequest(appRoot+"home.json?nocache="+(+new Date())+"&bpc=1", onHome, params);
+				};
+
+				function onHome(resp) {
+				    
+				    
+					console.log(resp);
+
+					var html = "<ul>";
+					$.each(resp.data.feed,function(i,problem){
+						html+= '<li>'+
+							'<h4>'+problem.problemTitle+'</h4>';
+						$.each(problem.problemMedias.items,function(j,media) {
+							html += '<dl>'+
+								'<dt>'+media.mediaTitle+'</dt>'+
+								'<dd>';
+								if(media.mediaType == 'photo') {
+									html+='<img src="'+media.mediaUrl+'" />';
+								}
+								html+='</dd>'+
+							'</dl>';
+						});
+							
+							
+						html+="</li>";
+					});
+					html+= "</ul>";
+
+					html = '<div id="feed">'+
+    					'<h3>Ultimas atividades</h3>'+
+    					'<div id="problemList">'+html+'</div>'+
+    				'</div>';
+                    // +
+                    // '<div id="ranking">'+
+                    //  '<h3>Ranking de usuários</h3>'+
+                    //  '<div id="userByRankList"></div>'+
+                    // '</div>';
+                    // $('#problemList').html(html);
+					
+					html = "";
+					
+				};
+			</script>
+		    <div id="app">
+		        <ul>
+		            <li><a href="#home">Home</a></li>
+		            <li><a href="#new_problem">Cadastrar problema</a></li>
+		            <li><a href="#new_problem">Convidar amigos</a></li>
+		        </ul>
+                <div id="home" class="ui-tabs-hide">
+                </div>
+                <div id="new_problem" class="ui-tabs-hide">
+                    <form id="saveProblem" action="/problem" method="POST">
+                    	<p>geolocation_lat: <input name="geolocation_lat" type="text" /></p>
+                    	<p>geolocation_lon: <input name="geolocation_lon" type="text" /></p>
+                    	<p>description: <textarea name="description"></textarea></p>
+
+                    	<button type="submit">Enviar</button>
+                    </form>
+                </div>
+		    </div>
+		]]>
+	</Content>
+</Module>
