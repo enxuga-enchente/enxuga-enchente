@@ -16,11 +16,11 @@ from models import *
 
 class PhotoHandler(webapp.RequestHandler):
     def get(self, photo_id):
-        photo = Photo.get('ID=', photo_id)
+        photo = Photo.get_by_id(int(photo_id))
         self.response.headers['Content-Type'] = 'image/jpeg'
         self.response.out.write(photo.image)
 
-application = webapp.WSGIApplication([('photos/(.*)', PhotoHandler),], debug=True)
+application = webapp.WSGIApplication([('/photos/(.*)', PhotoHandler),], debug=True)
 
 def main():
     wsgiref.handlers.CGIHandler().run(application)

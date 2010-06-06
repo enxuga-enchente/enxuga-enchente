@@ -21,6 +21,11 @@ class PhotoUploader(webapp.RequestHandler):
         template_values = {'problems': Problem.all() }
         self.response.out.write(template.render(path, template_values))
 
+    def post(self):
+        problem = Problem.get_by_id(int(self.request.get('problem_id')))
+        photo = Photo(problem = problem)
+        photo.image = db.Blob(str(self.request.get('photo')))
+        photo.put()
 
 application = webapp.WSGIApplication([('/admin/add_photo.html', PhotoUploader )], debug=True)
 
