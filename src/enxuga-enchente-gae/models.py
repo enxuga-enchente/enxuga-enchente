@@ -109,7 +109,7 @@ class ProblemVote(db.Model):
 
     def serialize(self):
         return {"problem_id":self.problem.key().id(),
-                "author":self.author.email,
+                "author":str(self.author),
                 "vote":self.vote}
 
     @classmethod

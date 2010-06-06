@@ -36,12 +36,12 @@ class OneProblemPage(webapp.RequestHandler):
         
 class PhotoPage(webapp.RequestHandler):
     def get(self):
-        return json.JSONEncoder().encode(self, Photo.get(self.request.GET.get("id")))
+        return json.JSONEncoder().encode(self, Photo.get(self.request.get("id")))
 
     def post(self):
         image = self.request.get("photo")
         
-        photo = Photo(problem=self.request.get("problem_id"),
+        photo = Photo(problem=int(self.request.get("problem_id")),
                       author=users.get_current_user(),
                       description=self.request.get("description"))
         photo.put()
@@ -61,8 +61,8 @@ class ProblemVotePage(webapp.RequestHandler):
 
 class CommentVotePage(webapp.RequestHandler):
     def post(self):
-        Comment.get_by_id(int(self.request.get("comment_id")).vote(author=self.get_current_user(),
-                                                              vote=self.request.get("vote"))
+        Comment.get_by_id(int(self.request.get("comment_id"))).vote(author=self.get_current_user(),
+                                                               vote=self.request.get("vote"))
 
 
 application = webapp.WSGIApplication([('/problems', ManyProblemsPage),
