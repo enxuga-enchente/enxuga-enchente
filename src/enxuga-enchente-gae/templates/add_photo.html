@@ -8,7 +8,7 @@
   <body>
     <h1>Mande a foto</h1>
 
-    <form method="POST" action="">
+    <form method="POST" enctype="multipart/form-data" action="">
       <select name="problem_id">
         {% for problem in problems %}
         <option value="{{ problem.key.id }}">{{ problem.title }}</option>
