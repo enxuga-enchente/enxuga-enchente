@@ -6,6 +6,7 @@ from google.appengine.api import users
     
 class Problem(db.Model):
     author = db.UserProperty()
+    title = db.StringProperty()
     date = db.DateTimeProperty(auto_now_add=True)
     geolocation = db.GeoPtProperty()
     description = db.TextProperty()

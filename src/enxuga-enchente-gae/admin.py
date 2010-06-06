@@ -14,16 +14,20 @@ from google.appengine.ext.webapp import template
 
 from models import * 
 
-class PhotoHandler(webapp.RequestHandler):
-    def get(self, photo_id):
-        photo = Photo.get('ID=', photo_id)
-        self.response.headers['Content-Type'] = 'image/jpeg'
-        self.response.out.write(photo.image)
+class PhotoUploader(webapp.RequestHandler):
+    def get(self):
+        path = 'templates/add_photo.html'
+        
+        template_values = {'problems': Problem.all() }
+        self.response.out.write(template.render(path, template_values))
 
-application = webapp.WSGIApplication([('photos/(.*)', PhotoHandler),], debug=True)
+
+application = webapp.WSGIApplication([('/admin/add_photo.html', PhotoUploader )], debug=True)
+
 
 def main():
     wsgiref.handlers.CGIHandler().run(application)
+
 
 if __name__ == '__main__':
     main()

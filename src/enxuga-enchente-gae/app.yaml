@@ -23,6 +23,12 @@ handlers:
 - url: /mock.*
   script: mock_site.py
 
+- url: /photos/*
+  script: photos.py
+
+- url: /admin/*
+  script: admin.py
+
 - url: .*
   script: enxuga.py
 
