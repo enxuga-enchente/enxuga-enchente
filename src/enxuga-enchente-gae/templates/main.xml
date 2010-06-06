@@ -72,12 +72,12 @@
 					$.each(resp.data.feed,function(i,problem){
 						html+= '<li>'+
 							'<h4>'+problem.problemTitle+'</h4>';
-						$.each(problem.problemMedias.items,function(j,media) {
+						$.each(problem.problemMedias,function(j,media) {
 							html += '<dl>'+
-								'<dt>'+media.mediaTitle+'</dt>'+
+                                // '<dt>'+media.mediaTitle+'</dt>'+
 								'<dd>';
 								if(media.mediaType == 'photo') {
-									html+='<img src="'+media.mediaUrl+'" />';
+									html+='<img width="300" src="'+media.mediaUrl+'" />';
 								}
 								html+='</dd>'+
 							'</dl>';
