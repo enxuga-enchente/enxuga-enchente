@@ -73,8 +73,15 @@ class HomeJSONHandler(webapp.RequestHandler):
                                                   'mediaUrl': 'http://enxuga-enchente.appspot.com/photos/%d' % m.key().id() } for m in p.photo_set ] } for p in Problem.all() ]
         self.response.out.write(json.JSONEncoder(indent = 4).encode(results))
 
+#
+class Main(webapp.RequestHandler):
+    # @login_required
+    def get(self):
+        self.response.out.write(template.render(os.path.dirname(__file__) + "/templates/main.xml",{"app":"orkut"}))
 
-application = webapp.WSGIApplication([('/problems', ManyProblemsPage),
+
+application = webapp.WSGIApplication([('/main', Main),
+                                      ('/problems', ManyProblemsPage),
                                       ('/problem', OneProblemPage),
                                       ('/problem_vote', ProblemVotePage),
                                       ('/photo', PhotoPage),
