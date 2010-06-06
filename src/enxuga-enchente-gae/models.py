@@ -55,7 +55,7 @@ class Photo(db.Model):
     def serialize(self):
         return {"problem_id":self.problem.key().id(),
                 "author":str(self.author),
-                "image":self.image,
+                "image":"http://enxuga-enchente.appspot.com/photos/%d" % self.key().id(),
                 "description":self.description,
                 "date":self.date.strftime("%H:%M - %d/%m/%Y")}
 
