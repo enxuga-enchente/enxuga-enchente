@@ -1,0 +1,33 @@
+{
+	"feed":[
+		{
+			"date": "2010-06-05 15:10:12",
+			"problemId": 87,
+			"problemTitle": "Barranco do Alemão",
+			"problemMedias": {
+				"items": [
+					{
+						"mediaType":"photo",
+						"mediaTitle":"Olha que vergonha de barranco",
+						"mediaUrl": "http://irae.pro.br/code/enchentes/morro1.jpg"
+					},
+					{
+						"mediaType":"photo",
+						"mediaTitle":"Olha quanto lixo!",
+						"mediaUrl": "http://irae.pro.br/code/enchentes/morro2.jpg"
+					}
+				],
+				"paging": {
+				    "currentPage": 1,
+				    "totalPages": 1,
+				    "totalItems":  2,
+				    "pageSize": 10,
+				    "previousPage": false,
+				    "nextPage": false,
+				    "sort": "mostRecent"
+				}
+			}
+		}
+	],
+	"ranking":null
+}
