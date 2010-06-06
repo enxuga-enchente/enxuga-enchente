@@ -3,10 +3,7 @@ import cgi
 import datetime
 import wsgiref.handlers
 
-try:
-    import json
-except ImportError:
-    import simplejson as json
+from django.utils import simplejson as json
 
 from google.appengine.ext import db
 from google.appengine.api import users
