@@ -17,7 +17,7 @@ from models import *
 
 class ManyProblemsPage(webapp.RequestHandler):
     def get(self):
-        return json.JSONEncoder().encode(Problem.all()[:])
+        return json.JSONEncoder().encode(Problem.all()[:10])
 
 
 class OneProblemPage(webapp.RequestHandler):
