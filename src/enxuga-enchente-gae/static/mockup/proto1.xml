@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+	<ModulePrefs title="Enxuga Enchentes">
+		<Require feature="opensocial-0.8" />
+	</ModulePrefs>
+	<Content type="html">
+		<![CDATA[
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+			<script type="text/javascript">
+				gadgets.util.registerOnLoadHandler(init);
+				function init() {
+					requestHome();
+				};
+				
+				function requestHome(url) {
+				  var params = {};
+				  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.JSON;
+				  gadgets.io.makeRequest("http://irae.pro.br/code/enchentes/home.json?nocache="+(+new Date())+"&bpc=1", onHome, params);
+				};
+				function onHome(resp) {
+					console.log(resp);
+
+					var html = "<ul>";
+					$.each(resp.data.feed,function(i,problem){
+						html+= '<li>'+
+							'<h4>'+problem.problemTitle+'</h4>';
+						$.each(problem.problemMedias.items,function(j,media) {
+							html += '<dl>'+
+								'<dt>'+media.mediaTitle+'</dt>'+
+								'<dd>';
+								if(media.mediaType == 'photo') {
+									html+='<img src="'+media.mediaUrl+'" />';
+								}
+								html+='</dd>'+
+							'</dl>'
+						});
+							
+							
+						html+="</li>";
+					});
+					html+= "</ul>";
+					
+					$('#problemList').html(html);
+					
+					html = "";
+					
+				};
+			</script>
+			<div id="home">
+				<div id="feed">
+					<h3>Ultimas atividades</h3>
+					<div id="problemList"></div>
+				</div>
+				<div id="ranking">
+					<h3>Ranking de usuários</h3>
+					<div id="userByRankList"></div>
+				</div>
+			</div>
+		]]>
+	</Content>
+</Module>
